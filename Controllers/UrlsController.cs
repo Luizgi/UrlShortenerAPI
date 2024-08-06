@@ -22,6 +22,11 @@ namespace UrlShortener.Controllers
         [HttpPost]
         public async Task<ActionResult<Url>> ShortenUrl([FromBody] Url url)
         {
+            if(!Uri.IsWellFormedUriString(url.OriginalUrl, UriKind.Absolute))
+            {
+                return BadRequest("Invalid URL format.");
+            }
+
             url.ShortUrl = GenerateShortUrl();
             url.CreatedAt = DateTime.UtcNow;
 
@@ -63,7 +68,6 @@ namespace UrlShortener.Controllers
             }
 
             return Redirect(url.OriginalUrl);
-            
         }
     }
 }
