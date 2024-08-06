@@ -12,5 +12,6 @@ namespace UrlShortener.Models
         public string ShortUrl { get; set; }
         public DateTime CreatedAt { get; set; }
         public int AcessCount { get; set; }
+        public DateTime? ExpirationDate {get; set;}
     }
 }

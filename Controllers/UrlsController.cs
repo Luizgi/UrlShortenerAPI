@@ -30,6 +30,11 @@ namespace UrlShortener.Controllers
             url.ShortUrl = GenerateShortUrl();
             url.CreatedAt = DateTime.UtcNow;
 
+            if(url.ExpirationDate == null)
+            {
+                url.ExpirationDate = DateTime.UtcNow.AddMonths(1);
+            }
+
             _context.Urls.Add(url);
             await _context.SaveChangesAsync();
 
@@ -72,6 +77,11 @@ namespace UrlShortener.Controllers
             if(url == null)
             {
                 return NotFound();
+            }
+
+            if(url.ExpirationDate < DateTime.UtcNow)
+            {
+                return BadRequest("URL has expired.");
             }
             url.AcessCount++;
             await _context.SaveChangesAsync();
