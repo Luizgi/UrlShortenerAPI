@@ -40,8 +40,15 @@ namespace UrlShortener.Controllers
         {
             var random = new Random();
             const string chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
-            return new string(Enumerable.Repeat(chars, 6)
+            string shortUrl;
+
+
+            do{
+                shortUrl = new string(Enumerable.Repeat(chars, 6)
                 .Select(s=> s[random.Next(s.Length)]).ToArray());
+            } while (_context.Urls.Any(u => u.ShortUrl == shortUrl));
+            
+            return shortUrl;
         }
 
         [HttpGet("{id}")]
