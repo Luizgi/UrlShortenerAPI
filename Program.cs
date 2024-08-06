@@ -3,21 +3,24 @@ using UrlShortener.Data;
 
 var builder = WebApplication.CreateBuilder(args);
 
+// Configurar URLs para a aplicação
+builder.WebHost.UseUrls("http://localhost:5000", "https://localhost:5001");
+
 // Add services to the container.
-// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(c =>
 {
-    c.SwaggerDoc("v1", new Microsoft.OpenApi.Models.OpenApiInfo{
+    c.SwaggerDoc("v1", new Microsoft.OpenApi.Models.OpenApiInfo
+    {
         Title = "URL Shortener API",
         Version = "v1"
     });
 });
 
-var connectionStr = builder.Configuration.GetConnectionString("DefaultConnection");
+var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
 builder.Services.AddDbContext<UrlContext>(options =>
-    options.UseSqlServer(connectionStr));
+    options.UseSqlServer(connectionString));
 
 var app = builder.Build();
 
@@ -33,5 +36,11 @@ app.UseHttpsRedirection();
 app.UseAuthorization();
 
 app.MapControllers();
+
+app.MapGet("/", async context =>
+{
+    context.Response.Redirect("/swagger");
+});
+    
 
 app.Run();
