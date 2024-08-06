@@ -4,6 +4,7 @@ using UrlShortener.Models;
 using System;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore;
 
 namespace UrlShortener.Controllers
 {
@@ -49,6 +50,20 @@ namespace UrlShortener.Controllers
             }
 
             return url;
+        }
+
+        [HttpGet("r/shortUrl")]
+        public async Task<IActionResult> RedirectToUrl(string shortUrl)
+        {
+            var url = await _context.Urls.FirstOrDefaultAsync(u => u.ShortUrl == shortUrl);
+
+            if(url == null)
+            {
+                return NotFound();
+            }
+
+            return Redirect(url.OriginalUrl);
+            
         }
     }
 }
