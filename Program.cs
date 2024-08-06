@@ -1,3 +1,6 @@
+using Microsoft.EntityFrameworkCore;
+using UrlShortener.Data;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
@@ -11,6 +14,10 @@ builder.Services.AddSwaggerGen(c =>
         Version = "v1"
     });
 });
+
+var connectionStr = builder.Configuration.GetConnectionString("DefaultConnection");
+builder.Services.AddDbContext<UrlContext>(options =>
+    options.UseSqlServer(connectionStr));
 
 var app = builder.Build();
 
