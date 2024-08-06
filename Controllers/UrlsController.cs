@@ -47,7 +47,7 @@ namespace UrlShortener.Controllers
                 shortUrl = new string(Enumerable.Repeat(chars, 6)
                 .Select(s=> s[random.Next(s.Length)]).ToArray());
             } while (_context.Urls.Any(u => u.ShortUrl == shortUrl));
-            
+
             return shortUrl;
         }
 
@@ -73,7 +73,8 @@ namespace UrlShortener.Controllers
             {
                 return NotFound();
             }
-
+            url.AcessCount++;
+            await _context.SaveChangesAsync();
             return Redirect(url.OriginalUrl);
         }
     }

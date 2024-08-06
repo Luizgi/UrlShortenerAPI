@@ -11,5 +11,6 @@ namespace UrlShortener.Models
         public string OriginalUrl { get; set; }
         public string ShortUrl { get; set; }
         public DateTime CreatedAt { get; set; }
+        public int AcessCount { get; set; }
     }
 }
